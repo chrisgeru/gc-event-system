@@ -52,7 +52,7 @@ class EventSubscriber(object):
                 reg.function.apply_async(args=(message.data, message.event),)
             logger.info('Event {} processed with "{}" callback. (Send event name: {}).'.format(message.event,
                                                                                                reg.function.__name__,
-                                                                                               reg.sent_event))
+                                                                                               reg.send_event))
         else:
             logger.info('Event {} Ignored.'.format(message.event))
         message.ack()
@@ -65,11 +65,12 @@ class EventSubscriber(object):
             type='function'
         )
         logger.info(
-            '{}: Event listener function "{}" registered for {}. (Send event name: {})'.format(
+            '{}: Event listener function "{}" registered for {}. (Send event name: {}, Ack Later: {})'.format(
                 self._obj_desc,
                 function.__name__,
                 event_name,
-                send_event
+                send_event,
+                ack_late
             )
         )
 
@@ -81,10 +82,11 @@ class EventSubscriber(object):
             type='task'
         )
         logger.info(
-            '{}: Event listener task "{}" registered for {}. (Send event name: {}).'.format(
+            '{}: Event listener task "{}" registered for {}. (Send event name: {}, Ack Later: {}).'.format(
                 self._obj_desc,
                 function.__name__,
                 event_name,
-                send_event
+                send_event,
+                ack_late
             )
         )
